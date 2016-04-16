@@ -48,8 +48,9 @@ public class MovieAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
+
+            //imageView.setLayoutParams(new GridView.LayoutParams(187,255));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            //imageView.setLayoutParams(new GridView.LayoutParams(185,277));
 
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -57,16 +58,6 @@ public class MovieAdapter extends BaseAdapter {
         }
 
         Picasso.with(mContext).load(mData.get(position).get("poster_path")).into(imageView);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(mContext,DetailViewActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("movieData",mData.get(position));
-                mContext.startActivity(i);
-            }
-        });
         return imageView;
     }
 }

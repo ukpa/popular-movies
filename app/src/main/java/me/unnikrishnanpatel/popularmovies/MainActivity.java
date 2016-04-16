@@ -1,5 +1,8 @@
 package me.unnikrishnanpatel.popularmovies;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridLayout;
 import android.widget.GridView;
 
@@ -32,16 +37,35 @@ public class MainActivity extends AppCompatActivity {
     FetchMoviewData movieData;
     String mostPopular = "http://api.themoviedb.org/3/movie/popular?api_key=7baf82d2c99ba2997a60d4af8b763034";
     String topRated = "http://api.themoviedb.org/3/movie/top_rated?api_key=7baf82d2c99ba2997a60d4af8b763034";
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String selection="";
         movieGrid = (GridView) findViewById(R.id.movie_grid);
-
         movieData = new FetchMoviewData();
-        movieData.execute(topRated);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (sharedPref.getString("selection","error") =="error"){
+            editor.putString("selection", topRated);
+            selection =topRated;
+            editor.commit();
+        }else{
+            selection = sharedPref.getString("selection","error");
+        }
+        movieData.execute(selection);
         movieGrid.setAdapter(movieAdapter);
+        movieGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(MainActivity.this, DetailViewActivity.class);
+                i.putExtra("movieData",movieList.get(position));
+                startActivity(i);
+
+            }
+        });
 
 
 
@@ -60,10 +84,18 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.top:
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("selection", topRated);
+                editor.commit();
                 new FetchMoviewData().execute(topRated);
+
                 return true;
             case R.id.pop:
+                SharedPreferences.Editor editor2 = sharedPref.edit();
+                editor2.putString("selection", mostPopular);
+                editor2.commit();
                 new FetchMoviewData().execute(mostPopular);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -113,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(movieDataJson);
                         movieList = new ArrayList<HashMap<String, String>>();
                         results = jsonObject.getJSONArray("results");
-                        System.out.println(results.length());
                         for(int i=0;i<results.length();i++){
                             JSONObject movieData = results.getJSONObject(i);
                             HashMap<String, String> movie = new HashMap<String, String>();
@@ -124,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
                             movie.put("popularity",movieData.getString("popularity"));
                             movie.put("vote_count",movieData.getString("vote_count"));
                             movie.put("vote_average",movieData.getString("vote_average"));
+                            movie.put("release_date",movieData.getString("release_date"));
+                            movie.put("id",movieData.getString("id"));
+                            movie.put("title",movieData.getString("title"));
                             movieList.add(movie);
                         }
 
