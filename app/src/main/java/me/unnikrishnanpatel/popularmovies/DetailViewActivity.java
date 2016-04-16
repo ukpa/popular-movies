@@ -1,5 +1,6 @@
 package me.unnikrishnanpatel.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -125,6 +127,10 @@ public class DetailViewActivity extends AppCompatActivity {
             }
             catch (JSONException e){
                 e.printStackTrace();
+            }
+            catch (NullPointerException e){
+                e.printStackTrace();
+
             }
 
 
