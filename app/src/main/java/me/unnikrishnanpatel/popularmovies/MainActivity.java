@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> movieList;
     GridView movieGrid;
     FetchMoviewData movieData;
-    String mostPopular = "http://api.themoviedb.org/3/movie/popular?api_key=7baf82d2c99ba2997a60d4af8b763034";
-    String topRated = "http://api.themoviedb.org/3/movie/top_rated?api_key=7baf82d2c99ba2997a60d4af8b763034";
+    String mostPopular = "http://api.themoviedb.org/3/movie/popular?api_key=<>";
+    String topRated = "http://api.themoviedb.org/3/movie/top_rated?api_key=<>";
     SharedPreferences sharedPref;
 
     @Override

@@ -52,7 +52,7 @@ public class DetailViewActivity extends AppCompatActivity {
         BufferedReader reader = null;
         String baseUrl = "http://image.tmdb.org/t/p/w185/";
         String preUrl = "https://api.themoviedb.org/3/movie/";
-        String api = "?api_key=7baf82d2c99ba2997a60d4af8b763034";
+        String api = "?api_key=<>";
         String movieDataJson = null;
 
         @Override
